@@ -1,14 +1,19 @@
-use crate::agent_account::AgentAccount;
+use http::Uri;
 
-pub struct Agent {
-    name: String,
-    mbox: String,
-    mbox_sha1sum: String,
-    openid: String,
-    account: AgentAccount
+#[derive(Default)]
+pub struct AgentAccount {
+    home_page: Uri,
+    name: String
 }
 
-impl Agent {
+impl AgentAccount {
+    pub fn new(home_page: Uri, name: String) -> Self {
+        Self {
+            home_page,
+            name
+        }
+    }
+
     pub fn from_string_of_json() -> Self {
         panic!("Not implemented yet.");
     }
