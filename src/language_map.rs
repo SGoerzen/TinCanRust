@@ -1,8 +1,5 @@
 use std::collections::HashMap;
 
-use serde::{Serialize, Deserialize};
-
-#[derive(Serialize, Deserialize)]
 pub struct LanguageMap {
     pub map: HashMap<String, String>
 }

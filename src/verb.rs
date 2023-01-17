@@ -1,13 +1,10 @@
 use http::Uri;
 use crate::language_map::LanguageMap;
 
-use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Deserialize)]
 pub struct Verb {
     pub id: Uri,
     pub display: LanguageMap,
-
 }
 
 impl From<Uri> for Verb {
@@ -40,8 +37,10 @@ impl Verb {
     pub fn from_string_of_json() -> Self {
         panic!("Not implemented yet.");
     }
-
     pub fn from_json() -> Self {
+        panic!("Not implemented yet.");
+    }
+    pub fn to_json(&self) {
         panic!("Not implemented yet.");
     }
 }

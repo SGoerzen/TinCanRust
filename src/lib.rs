@@ -3,18 +3,12 @@ mod language_map;
 mod result;
 mod statement;
 mod verb;
+mod version;
+mod score;
+mod extensions;
+mod interaction_type;
 
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+pub trait ILRS {
+    // todo: https://github.com/RusticiSoftware/TinCan.NET/blob/master/TinCan/ILRS.cs
 }
