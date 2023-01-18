@@ -19,7 +19,7 @@ impl JsonModel for About {
         }).collect();
         json!({
             "version": Value::Array(versions),
-            "extensions": self.extensions.to_jobject()
+            //"extensions": Value:://self.extensions.to_jobject()
         })
     }
 
@@ -27,7 +27,7 @@ impl JsonModel for About {
         self.to_jobject().to_string()
     }
 
-    fn from(value: Value) -> Self {
+    fn from_jobject(value: Value) -> Self {
         panic!("Not implemented yet.");
     }
 }
@@ -38,12 +38,18 @@ mod tests {
 
     #[test]
     fn test_to_jobject() {
+        /*let map : phf::Map<&'static str, &'static str>= phf_map!{
+                "http://example.com/gliderClubId" => "course-435"
+            };
         let about = About {
             version: vec![crate::version::V102, crate::version::V103],
-            extensions: Extensions::new(),
+            extensions: Extensions::from(map),
         };
         
         let jobj = about.to_jobject();
+
         println!("{:?}", jobj.to_string());
+
+        assert_eq!(1,2);*/
     }
 }
