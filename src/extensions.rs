@@ -40,40 +40,54 @@ impl ops::Index<&'static str> for Extensions {
     }
 }
 
+impl From<Value> for Extensions {
+    fn from(value: Value) -> Self {
+        match serde_json::from_value(value) {
+            Ok(v) => v,
+            Err(e) => panic!("error: {e:?}")
+        }
+    }
+}
+
 impl JsonModel for Extensions {
     fn to_jobject(&self) -> Value {
-        let str = self.to_json();
-        serde_json::from_str(&str).unwrap()
+        match serde_json::to_value(&self) {
+            Ok(v) => v,
+            Err(e) => panic!("error: {e:?}")
+        }
     }
 
-    fn to_json(&self) -> String {
-        serde_json::to_string(&self).unwrap()
+    fn to_json(&self) -> String{
+        match serde_json::to_string(&self) {
+            Ok(v) => v,
+            Err(e) => panic!("error: {e:?}")
+        }
     }
 
     fn from_jobject(value: Value) -> Self {
-        let str = value.to_string();
-        serde_json::from_str(&str).unwrap()
+        Extensions::from(value)
     }
 }
 
 
 #[cfg(test)]
-mod tests {
-    use serde::de::Unexpected::Str;
+pub mod tests {
     use super::*;
 
-    static EXT_KEY: &str = "http://example.com/gliderClubId";
+    pub static EXT_KEY: &str = "http://example.com/gliderClubId";
+    pub static EXT_VALUE: &str = "course-435";
+    pub static EXT_JSON: &str = r#"{"http://example.com/gliderClubId":"course-435"}"#;
 
-    fn create_extensions() -> Extensions {
+    pub fn create_extensions() -> Extensions {
         let mut extensions = Extensions::new();
-        extensions.add(EXT_KEY, "course-435");
+        extensions.add(EXT_KEY, EXT_VALUE);
         extensions
     }
 
     #[test]
     fn extensions() {
         let extensions = create_extensions();
-        assert_eq!(extensions[EXT_KEY], "course-435");
+        assert_eq!(extensions[EXT_KEY], EXT_VALUE);
         assert_eq!(extensions.len(), extensions.0.len());
     }
 
@@ -81,19 +95,19 @@ mod tests {
     fn to_jobject() {
         let extensions = create_extensions();
         let jobj = extensions.to_jobject();
-        assert_eq!(jobj[EXT_KEY], "course-435");
+        assert_eq!(jobj[EXT_KEY], EXT_VALUE);
     }
 
     #[test]
     fn to_json() {
         let extensions = create_extensions();
-        assert_eq!(extensions.to_json(), "{\"http://example.com/gliderClubId\":\"course-435\"}");
+        assert_eq!(extensions.to_json(), EXT_JSON);
     }
 
     #[test]
     fn from_jobject() {
         let mut map = serde_json::Map::new();
-        map.insert(String::from(EXT_KEY), Value::String(String::from("course-435")));
+        map.insert(String::from(EXT_KEY), Value::String(String::from(EXT_VALUE)));
         let value = Value::Object(map);
         let extensions = Extensions::from_jobject(value);
         assert_eq!(extensions[EXT_KEY], "course-435");
