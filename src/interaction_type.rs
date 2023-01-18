@@ -67,22 +67,43 @@ mod tests {
 
     #[test]
     fn test_from_value() {
-        let interaction_type = InteractionType::from_value("choice");
-        assert_eq!(interaction_type, InteractionType::Choice);
-
-        let interaction_type = InteractionType::from_value("xxx");
-        assert_eq!(interaction_type, InteractionType::Unknown);
+        assert_eq!(InteractionType::from_value("choice"), InteractionType::Choice);
+        assert_eq!(InteractionType::from_value("sequencing"), InteractionType::Sequencing);
+        assert_eq!(InteractionType::from_value("likert"), InteractionType::Likert);
+        assert_eq!(InteractionType::from_value("matching"), InteractionType::Matching);
+        assert_eq!(InteractionType::from_value("true-false"), InteractionType::TrueFalse);
+        assert_eq!(InteractionType::from_value("fill-in"), InteractionType::FillIn);
+        assert_eq!(InteractionType::from_value("long-fill-in"), InteractionType::LongFillIn);
+        assert_eq!(InteractionType::from_value("numeric"), InteractionType::Numeric);
+        assert_eq!(InteractionType::from_value("other"), InteractionType::Other);
+        assert_eq!(InteractionType::from_value("xxx"), InteractionType::Unknown);
     }
 
     #[test]
     fn test_to_value() {
-        let interaction_type = InteractionType::FillIn;
-        assert_eq!(interaction_type.to_value(), "fill-in");
+        assert_eq!(InteractionType::Choice.to_value(), "choice");
+        assert_eq!(InteractionType::Sequencing.to_value(), "sequencing");
+        assert_eq!(InteractionType::Likert.to_value(), "likert");
+        assert_eq!(InteractionType::Matching.to_value(), "matching");
+        assert_eq!(InteractionType::TrueFalse.to_value(), "true-false");
+        assert_eq!(InteractionType::FillIn.to_value(), "fill-in");
+        assert_eq!(InteractionType::LongFillIn.to_value(), "long-fill-in");
+        assert_eq!(InteractionType::Numeric.to_value(), "numeric");
+        assert_eq!(InteractionType::Other.to_value(), "other");
+        assert_eq!(InteractionType::Unknown.to_value(), "unknown");
     }
 
     #[test]
     fn test_to_string() {
-        let interaction_type = InteractionType::TrueFalse;
-
+        assert_eq!(InteractionType::Choice.to_string(), "Choice");
+        assert_eq!(InteractionType::Sequencing.to_string(), "Sequencing");
+        assert_eq!(InteractionType::Likert.to_string(), "Likert");
+        assert_eq!(InteractionType::Matching.to_string(), "Matching");
+        assert_eq!(InteractionType::TrueFalse.to_string(), "TrueFalse");
+        assert_eq!(InteractionType::FillIn.to_string(), "FillIn");
+        assert_eq!(InteractionType::LongFillIn.to_string(), "LongFillIn");
+        assert_eq!(InteractionType::Numeric.to_string(), "Numeric");
+        assert_eq!(InteractionType::Other.to_string(), "Other");
+        assert_eq!(InteractionType::Unknown.to_string(), "Unknown");
     }
 }
