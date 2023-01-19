@@ -71,7 +71,7 @@ impl ToString for TCAPIVersion {
 }
 
 impl JsonModel for TCAPIVersion {
-    fn to_jobject(&self) -> Value {
+    fn to_value(&self) -> Value {
         Value::String(self.0.clone())
     }
 
@@ -79,7 +79,7 @@ impl JsonModel for TCAPIVersion {
         self.0.clone()
     }
 
-    fn from_jobject(value: Value) -> Self {
+    fn from_value(value: Value) -> Self {
         TCAPIVersion(value.to_string())
     }
 }
@@ -118,8 +118,8 @@ mod tests {
     }
 
     #[test]
-    fn to_jobject() {
-        assert_eq!(TCAPIVersion::v103().to_jobject(), Value::String(String::from("1.0.3")))
+    fn to_value() {
+        assert_eq!(TCAPIVersion::v103().to_value(), Value::String(String::from("1.0.3")))
     }
 
     #[test]
@@ -128,8 +128,8 @@ mod tests {
     }
 
     #[test]
-    fn from_jobject() {
+    fn from_value() {
         let value = Value::String(String::from("1.0.3"));
-        assert_eq!(TCAPIVersion::from_jobject(value).0, "\"1.0.3\"")
+        assert_eq!(TCAPIVersion::from_value(value).0, "\"1.0.3\"")
     }
 }

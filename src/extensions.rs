@@ -1,14 +1,15 @@
 use std::collections::HashMap;
 use std::ops;
 
-use serde::{Serialize, Deserialize};
+use serde::{Serialize, Deserialize, Serializer};
+use serde::ser::SerializeMap;
 use serde_json::{Value};
 
 use crate::json::JsonModel;
 use crate::{MapAdd};
 
-#[derive(Serialize, Deserialize, Debug, Default)]
-pub struct Extensions(HashMap<String, Value>);
+#[derive(Deserialize, Debug, Default)]
+pub struct Extensions(HashMap<String, Value>); // todo: Exchange to HashMap<Uri, Value>
 
 impl Extensions {
     pub fn new() -> Self {
@@ -17,6 +18,19 @@ impl Extensions {
 
     pub fn len(&self) -> usize {
         self.0.len()
+    }
+}
+
+impl Serialize for Extensions {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+        where
+            S: Serializer,
+    {
+        let mut map = serializer.serialize_map(Some(self.0.len()))?;
+        for (k, v) in &self.0 {
+            map.serialize_entry(&k.to_string(), &v)?;
+        }
+        map.end()
     }
 }
 
@@ -50,7 +64,7 @@ impl From<Value> for Extensions {
 }
 
 impl JsonModel for Extensions {
-    fn to_jobject(&self) -> Value {
+    fn to_value(&self) -> Value {
         match serde_json::to_value(&self) {
             Ok(v) => v,
             Err(e) => panic!("error: {e:?}")
@@ -64,7 +78,7 @@ impl JsonModel for Extensions {
         }
     }
 
-    fn from_jobject(value: Value) -> Self {
+    fn from_value(value: Value) -> Self {
         Extensions::from(value)
     }
 }
@@ -92,9 +106,9 @@ pub mod tests {
     }
 
     #[test]
-    fn to_jobject() {
+    fn to_value() {
         let extensions = create_extensions();
-        let jobj = extensions.to_jobject();
+        let jobj = extensions.to_value();
         assert_eq!(jobj[EXT_KEY], EXT_VALUE);
     }
 
@@ -105,11 +119,11 @@ pub mod tests {
     }
 
     #[test]
-    fn from_jobject() {
+    fn from_value() {
         let mut map = serde_json::Map::new();
         map.insert(String::from(EXT_KEY), Value::String(String::from(EXT_VALUE)));
         let value = Value::Object(map);
-        let extensions = Extensions::from_jobject(value);
+        let extensions = Extensions::from_value(value);
         assert_eq!(extensions[EXT_KEY], "course-435");
         assert_eq!(extensions.len(), 1);
     }

@@ -9,6 +9,7 @@ mod language_map;
 mod result;
 mod score;
 mod statement;
+mod statement_target;
 mod verb;
 pub mod version;
 

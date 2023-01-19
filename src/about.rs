@@ -12,7 +12,7 @@ pub struct About {
 }
 
 impl JsonModel for About {
-    fn to_jobject(&self) -> Value {
+    fn to_value(&self) -> Value {
         match serde_json::to_value(&self) {
             Ok(v) => v,
             Err(e) => panic!("error: {e:?}")
@@ -26,7 +26,7 @@ impl JsonModel for About {
         }
     }
 
-    fn from_jobject(value: Value) -> Self {
+    fn from_value(value: Value) -> Self {
         About::from(value)
     }
 }
@@ -73,12 +73,12 @@ mod tests {
     }
 
     #[test]
-    fn to_jobject() {
+    fn to_value() {
         let a = create_about();
 
-        let jobj_about = a.to_jobject();
-        let jobj_version = a.version[0].clone().to_jobject();
-        let jobj_extensions = a.extensions.to_jobject();
+        let jobj_about = a.to_value();
+        let jobj_version = a.version[0].clone().to_value();
+        let jobj_extensions = a.extensions.to_value();
         assert_eq!(jobj_about["version"], Value::Array(vec![jobj_version]));
         assert_eq!(jobj_extensions[crate::extensions::tests::EXT_KEY], crate::extensions::tests::EXT_VALUE);
     }
@@ -90,8 +90,8 @@ mod tests {
     }
 
     #[test]
-    fn from_jobject() {
-        let a = About::from_jobject(json!({
+    fn from_value() {
+        let a = About::from_value(json!({
             "version" : ["1.0.3"],
             "extensions" :
             {"http://example.com/gliderClubId" : "course-435"}
