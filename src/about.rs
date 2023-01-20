@@ -1,4 +1,4 @@
-use serde_json::{json, Value};
+use serde_json::{Value};
 use crate::extensions::Extensions;
 use crate::json::JsonModel;
 use crate::version::TCAPIVersion;
@@ -42,6 +42,7 @@ impl From<Value> for About {
 
 #[cfg(test)]
 mod tests {
+    use serde_json::json;
     use super::*;
 
     static ABOUT_JSON: &str = r#"{
@@ -69,7 +70,8 @@ mod tests {
     #[test]
     fn from() {
         let a: About = serde_json::from_str(ABOUT_JSON).unwrap();
-        println!("{:?}", a);
+        assert_eq!(a.version[0].to_string(), "1.0.3");
+        assert_eq!(a.extensions["http://example.com/gliderClubId"], String::from("course-435"));
     }
 
     #[test]
