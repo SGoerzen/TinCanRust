@@ -60,3 +60,63 @@ impl From<Value> for AgentAccount {
         }
     }
 }
+
+mod tests {
+    use std::str::FromStr;
+    use serde_json::json;
+    use super::*;
+
+    static ACCOUNT_JSON: &str = r#"{
+        "homePage": "https://twitter.com/",
+        "name" : "projecttincan"
+     }"#;
+
+    fn create_agent_account() -> AgentAccount {
+        AgentAccount {
+            name: String::from("projecttincan"),
+            home_page: Uri::from_str("https://twitter.com/").unwrap()
+        }
+    }
+
+    #[test]
+    fn agent_account() {
+        let account = create_agent_account();
+        assert_eq!(account.name, "projecttincan");
+        assert_eq!(account.home_page, "https://twitter.com/");
+    }
+
+    #[test]
+    fn from() {
+        let account: AgentAccount = serde_json::from_str(ACCOUNT_JSON).unwrap();
+        assert_eq!(account.name, "projecttincan");
+        assert_eq!(account.home_page, "https://twitter.com/");
+    }
+
+    #[test]
+    fn to_value() {
+        let account = create_agent_account();
+        let jobj: Value = account.to_value();
+        assert_eq!(jobj["name"], "projecttincan");
+        assert_eq!(jobj["homePage"].as_str().unwrap(), "https://twitter.com/");
+    }
+
+    #[test]
+    fn to_json() {
+        let account = create_agent_account();
+        assert_eq!(account.to_json(),
+                   ACCOUNT_JSON.replace(" ", "")
+                       .replace("\n", ""));
+    }
+
+    #[test]
+    fn from_value() {
+        let value: Value = json!({
+            "homePage": "https://twitter.com",
+            "name" : "projecttincan"
+        });
+
+        let account = AgentAccount::from_value(value);
+        assert_eq!(account.name, "projecttincan");
+        assert_eq!(account.home_page, "https://twitter.com");
+    }
+}

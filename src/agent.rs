@@ -74,7 +74,7 @@ impl StatementTarget for Agent {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use std::str::FromStr;
     use http::Uri;
     use serde_json::json;
