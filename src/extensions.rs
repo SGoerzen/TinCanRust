@@ -56,10 +56,7 @@ impl ops::Index<&'static str> for Extensions {
 
 impl From<Value> for Extensions {
     fn from(value: Value) -> Self {
-        match serde_json::from_value(value) {
-            Ok(v) => v,
-            Err(e) => panic!("error: {e:?}")
-        }
+        Extensions::from_value(value)
     }
 }
 
@@ -79,7 +76,10 @@ impl JsonModel for Extensions {
     }
 
     fn from_value(value: Value) -> Self {
-        Extensions::from(value)
+        match serde_json::from_value(value) {
+            Ok(v) => v,
+            Err(e) => panic!("error: {e:?}")
+        }
     }
 }
 
